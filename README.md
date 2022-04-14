@@ -1,10 +1,27 @@
 # CSKS
 Coalescent simulations the generate k-mer spectra
 
+## Setting up conda environment
+
+```
+conda create -n CSKS -c bioconda -c conda-forge msprime kmc python=3 numpy matplotlib wgsim pyfaidx
+conda install -c r r
+```
+
 ## Usage
-1. Set up conda environment: `bash 00setUpEnv.sh`
-2. Run pipeline: `bash -i 01pipeline.sh`
-3. Adjust paprameters in `01pipeline.sh` and re-run if desired.
+
+
+KSJ: We should add this to and a config file (yml file?)
+
+PGE simulation
+
+-
+
+Allopolyploid simulation
+
+- Run pipeline: `bash -i 01pipeline.sh`
+- Adjust paprameters in `01pipeline.sh` and re-run if desired.
+
 
 
 ## The motivation
