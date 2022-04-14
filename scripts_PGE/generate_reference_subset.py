@@ -31,11 +31,13 @@ if __name__ == "__main__":
 
     ##### Now we load the reference genome index and generate the sub sampled genome
     genome = Fasta(args.g)
+    list_of_scaffolds = list(genome.keys())
     sys.stderr.write('loaded {} genome file\n'.format(args.g))
+
+    # load the index?
 
     chromosome = 0
     total_desired = int(args.l * 1e6)
-    added_scaffolds = set()
 
     with open(args.o, 'w') as output_fasta:
         while chromosome < args.n:
@@ -44,8 +46,9 @@ if __name__ == "__main__":
 
             sampled_length = 0
             while sampled_length < total_desired:
-                picked_scf = choice(list(genome.keys()))
+                picked_scf = choice(list_of_scaffolds)
                 scaffold_record = genome[picked_scf]
+                # use the INDEX instead!!!
                 scaffold_length = len(scaffold_record)
 
                 if scaffold_length < 10000:

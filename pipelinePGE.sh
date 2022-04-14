@@ -12,29 +12,29 @@ paternal_coverage=$4
 
 sim=sim_h"$theta"_X"$X_chromosomes"_m"$maternal_coverage"_p"$paternal_coverage"
 
-reference_template=data/reference/Afus1/genome_short_headers.fa
+reference_template=data/genome_short_headers.fa
 
 ### generating reference for this simulation
 # -l cen specify length of each chromosome, but it's 1Mbp by default, so no need to adjust that
-python3 scripts_PGE/generate_reference_subset.py -g "$reference_template" -n $autosomes -o simulation/sim_reference_A.fasta
-python3 scripts_PGE/generate_reference_subset.py -g "$reference_template" -n $X_chromosomes -o simulation/sim_reference_X.fasta
+python scripts_PGE/generate_reference_subset.py -g "$reference_template" -n $autosomes -o simulation/sim_reference_A.fasta
+python scripts_PGE/generate_reference_subset.py -g "$reference_template" -n $X_chromosomes -o simulation/sim_reference_X.fasta
 
 # the merged reference will used for mapping reads
 cat simulation/sim_reference_A.fasta simulation/sim_reference_X.fasta > simulation/sim_reference.fasta
 echo "Step 1 done: New reference has been generated (simulation/sim_reference.fasta)"
 
 # here I will need to sprinkle mutations on autosomes and X chromosomes separately, so I will use the corresponding files
-python3 scripts_PGE/create_divergent_haplotypes.py -g simulation/sim_reference_A.fasta -het $theta -o simulation/sim_genome_A
-python3 scripts_PGE/create_divergent_haplotypes.py -g simulation/sim_reference_X.fasta -het $theta -o simulation/sim_genome_X --monosomic
+python scripts_PGE/create_divergent_haplotypes.py -g simulation/sim_reference_A.fasta -het $theta -o simulation/sim_genome_A
+python scripts_PGE/create_divergent_haplotypes.py -g simulation/sim_reference_X.fasta -het $theta -o simulation/sim_genome_X --monosomic
 
 echo "Step 2 done: Maternal and Paternal genomes with mutations were simulated (simulation/sim_genome_?_[mp]at.fasta)"
 
 # maternal A
-python3 scripts_PGE/simulate_reads.py -g simulation/sim_genome_A_mat.fasta  -c $maternal_coverage -o simulation/reads_maternal_A
+python scripts_PGE/simulate_reads.py -g simulation/sim_genome_A_mat.fasta  -c $maternal_coverage -o simulation/reads_maternal_A
 # maternal X
-python3 scripts_PGE/simulate_reads.py -g simulation/sim_genome_X_mat.fasta -c $maternal_coverage -o simulation/reads_maternal_X
+python scripts_PGE/simulate_reads.py -g simulation/sim_genome_X_mat.fasta -c $maternal_coverage -o simulation/reads_maternal_X
 # paternal A
-python3 scripts_PGE/simulate_reads.py -g simulation/sim_genome_A_pat.fasta  -c $paternal_coverage -o simulation/reads_paternal_A
+python scripts_PGE/simulate_reads.py -g simulation/sim_genome_A_pat.fasta  -c $paternal_coverage -o simulation/reads_paternal_A
 
 cat simulation/reads_maternal_A_R1.fq simulation/reads_maternal_X_R1.fq simulation/reads_paternal_A_R1.fq > simulation/sim_reads_R1.fq
 cat simulation/reads_maternal_A_R2.fq simulation/reads_maternal_X_R2.fq simulation/reads_paternal_A_R2.fq > simulation/sim_reads_R2.fq
